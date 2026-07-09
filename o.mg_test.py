@@ -2,7 +2,7 @@ import os
 os.environ["TK_SILENCE_DEPRECATION"] = "1"
 import tkinter as tk
 
-PASSWORD = "admin"
+PASSWORD = "letmein"   # change this to whatever you want the correct answer to be
 
 root = tk.Tk()
 root.attributes("-fullscreen", True)
@@ -25,7 +25,7 @@ entry = tk.Entry(
     insertbackground="#00ff00",
     justify="center",
     width=30,
-    show="•",
+    show="*",
 )
 entry.place(relx=0.5, rely=0.5, anchor="center")
 entry.focus_set()
@@ -39,4 +39,15 @@ output = tk.Label(
 )
 output.place(relx=0.5, rely=0.62, anchor="center")
 
-def
+def on_submit(event=None):
+    if entry.get() == PASSWORD:
+        root.destroy()
+    else:
+        output.config(text="ACCESS DENIED")
+        entry.delete(0, tk.END)
+
+entry.bind("<Return>", on_submit)
+root.bind("<Escape>", lambda e: root.destroy())
+root.bind("<Command-q>", lambda e: root.destroy())
+
+root.mainloop()
