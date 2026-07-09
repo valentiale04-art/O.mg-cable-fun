@@ -1,23 +1,13 @@
+import os
+os.environ["TK_SILENCE_DEPRECATION"] = "1"
 import tkinter as tk
 
 root = tk.Tk()
-
-# Kill window decorations and force it over everything (menu bar, Dock)
-root.overrideredirect(True)
-root.attributes("-topmost", True)
-
-# Size it to the full screen dimensions explicitly
-screen_w = root.winfo_screenwidth()
-screen_h = root.winfo_screenheight()
-root.geometry(f"{screen_w}x{screen_h}+0+0")
-
 root.configure(bg="black")
 
-# macOS-specific: this is what actually forces true fullscreen coverage
-try:
-    root.attributes("-fullscreen", True)
-except tk.TclError:
-    pass
+# Force the window to exist and render BEFORE going fullscreen/topmost
+root.update_idletasks()
+root.deiconify()
 
 label = tk.Label(
     root,
@@ -30,8 +20,14 @@ label = tk.Label(
 label.place(relx=0.5, rely=0.5, anchor="center")
 
 root.bind("<Escape>", lambda e: root.destroy())
+root.bind("<Command-q>", lambda e: root.destroy())
 
-# Grab focus so keystrokes (ESC) reliably reach the window
+# Draw first, THEN apply fullscreen + focus — order matters on macOS
+root.update()
+root.attributes("-fullscreen", True)
+root.attributes("-topmost", True)
+root.update()
 root.focus_force()
+root.lift()
 
 root.mainloop()
