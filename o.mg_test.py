@@ -3,14 +3,7 @@ os.environ["TK_SILENCE_DEPRECATION"] = "1"
 import tkinter as tk
 
 root = tk.Tk()
-root.update()
-
-sw = root.winfo_screenwidth()
-sh = root.winfo_screenheight()
-
-# Frameless, no title bar, no dragging — covers menu bar + Dock
-root.overrideredirect(True)
-root.geometry("%dx%d+0+0" % (sw, sh))
+root.attributes("-fullscreen", True)   # covers menu bar + Dock natively
 root.configure(bg="black")
 
 label = tk.Label(
@@ -26,9 +19,7 @@ label.place(relx=0.5, rely=0.5, anchor="center")
 root.bind("<Escape>", lambda e: root.destroy())
 root.bind("<Command-q>", lambda e: root.destroy())
 
-root.update()
 root.attributes("-topmost", True)
-root.lift()
 root.focus_force()
 
 root.mainloop()
