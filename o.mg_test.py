@@ -4,10 +4,31 @@ import tkinter as tk
 
 root = tk.Tk()
 root.configure(bg="black")
+
+# Render first so the window exists
 root.update_idletasks()
 
-sw, sh = root.winfo_screenwidth(), root.winfo_screenheight()
+# Manually size to full screen instead of relying on -fullscreen attribute
+sw = root.winfo_screenwidth()
+sh = root.winfo_screenheight()
 root.geometry(f"{sw}x{sh}+0+0")
-root.update()
 
-label = tk.Label(root, text="🎵 YOU'VE BEEN RICKROLLED 🎵\n\nNever gonna give you up\nNever gonna let
+label = tk.Label(
+    root,
+    text="🎵 YOU'VE BEEN RICKROLLED 🎵\n\nNever gonna give you up\nNever gonna let you down\n\n[ press ESC to escape ]",
+    font=("Helvetica", 48, "bold"),
+    fg="#00ff00",
+    bg="black",
+    justify="center",
+)
+label.place(relx=0.5, rely=0.5, anchor="center")
+
+root.bind("<Escape>", lambda e: root.destroy())
+root.bind("<Command-q>", lambda e: root.destroy())
+
+root.update()
+root.lift()
+root.attributes("-topmost", True)
+root.focus_force()
+
+root.mainloop()
