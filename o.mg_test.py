@@ -7,7 +7,13 @@ os.environ["TK_SILENCE_DEPRECATION"] = "1"
 PASSWORD = "letmein"   # change this to whatever you want the correct answer to be
 
 root = tk.Tk()
-root.attributes("-fullscreen", True)
+
+# --- Cover the whole screen WITHOUT macOS native fullscreen (avoids grey screen) ---
+SCREEN_W = root.winfo_screenwidth()
+SCREEN_H = root.winfo_screenheight()
+root.overrideredirect(True)                         # borderless window
+root.geometry(f"{SCREEN_W}x{SCREEN_H}+0+0")         # cover entire screen
+root.attributes("-topmost", True)                   # stay on top
 root.configure(bg="black")
 
 title = tk.Label(
@@ -24,13 +30,12 @@ entry = tk.Entry(
     font=("Helvetica", 28),
     fg="#00ff00",
     bg="#111111",
-    insertbackground="#00ff00",
+    insertbackground="#00ff00",   # cursor color
     justify="center",
     width=30,
-    show="*",
+    show="*",                     # masks input like a real password field
 )
 entry.place(relx=0.5, rely=0.5, anchor="center")
-entry.focus_set()
 
 output = tk.Label(
     root,
@@ -54,8 +59,6 @@ root.bind("<Command-q>", lambda e: root.destroy())
 
 # --- mouse border: keep cursor 1 inch inside every screen edge ---
 MARGIN = int(root.winfo_fpixels("1i"))   # pixels in 1 inch
-SCREEN_W = root.winfo_screenwidth()
-SCREEN_H = root.winfo_screenheight()
 LEFT, TOP = MARGIN, MARGIN
 RIGHT, BOTTOM = SCREEN_W - MARGIN, SCREEN_H - MARGIN
 
@@ -69,6 +72,11 @@ def clamp_mouse():
         Quartz.CGAssociateMouseAndMouseCursorPosition(True)
     root.after(10, clamp_mouse)
 
-root.update()      # force the fullscreen window to paint (fixes grey screen)
-clamp_mouse()      # start the border
+# make sure the window is drawn and focused before we start
+root.update()
+root.lift()
+root.focus_force()
+entry.focus_set()
+
+clamp_mouse()
 root.mainloop()
