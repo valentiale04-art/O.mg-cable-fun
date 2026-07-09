@@ -3,15 +3,15 @@ os.environ["TK_SILENCE_DEPRECATION"] = "1"
 import tkinter as tk
 
 root = tk.Tk()
-root.configure(bg="black")
 root.update()
 
 sw = root.winfo_screenwidth()
 sh = root.winfo_screenheight()
-print(f"Detected screen: {sw}x{sh}")   # so we can see what it's reading
 
+# Frameless, no title bar, no dragging — covers menu bar + Dock
+root.overrideredirect(True)
 root.geometry("%dx%d+0+0" % (sw, sh))
-root.resizable(False, False)
+root.configure(bg="black")
 
 label = tk.Label(
     root,
@@ -26,10 +26,9 @@ label.place(relx=0.5, rely=0.5, anchor="center")
 root.bind("<Escape>", lambda e: root.destroy())
 root.bind("<Command-q>", lambda e: root.destroy())
 
-root.geometry("%dx%d+0+0" % (sw, sh))  # set again after widgets added
 root.update()
-root.lift()
 root.attributes("-topmost", True)
+root.lift()
 root.focus_force()
 
 root.mainloop()
