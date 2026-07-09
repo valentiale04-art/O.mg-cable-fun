@@ -4,14 +4,14 @@ import tkinter as tk
 
 root = tk.Tk()
 root.configure(bg="black")
+root.update()
 
-# Render first so the window exists
-root.update_idletasks()
-
-# Manually size to full screen instead of relying on -fullscreen attribute
 sw = root.winfo_screenwidth()
 sh = root.winfo_screenheight()
-root.geometry(f"{sw}x{sh}+0+0")
+print(f"Detected screen: {sw}x{sh}")   # so we can see what it's reading
+
+root.geometry("%dx%d+0+0" % (sw, sh))
+root.resizable(False, False)
 
 label = tk.Label(
     root,
@@ -26,6 +26,7 @@ label.place(relx=0.5, rely=0.5, anchor="center")
 root.bind("<Escape>", lambda e: root.destroy())
 root.bind("<Command-q>", lambda e: root.destroy())
 
+root.geometry("%dx%d+0+0" % (sw, sh))  # set again after widgets added
 root.update()
 root.lift()
 root.attributes("-topmost", True)
